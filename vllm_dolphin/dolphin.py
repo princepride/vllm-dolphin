@@ -185,6 +185,7 @@ class DolphinMultiModalProcessor(
             prompt_text: str,
             mm_items: MultiModalDataItems,
             hf_processor_mm_kwargs: Mapping[str, object],
+            tokenization_kwargs: Mapping[str, object],
     ) -> bool:
         return False
 
@@ -207,11 +208,12 @@ class DolphinMultiModalProcessor(
             prompt: str,
             mm_data: Mapping[str, object],
             mm_kwargs: Mapping[str, object],
+            tok_kwargs: Mapping[str, object],
     ) -> BatchFeature:
         hf_processor = self.info.get_hf_processor()
         if mm_data:
             processed_outputs = super()._call_hf_processor(
-                prompt, mm_data, mm_kwargs)
+                prompt, mm_data, mm_kwargs, tok_kwargs)
             if isinstance(hf_processor, NougatProcessor):
                 processed_outputs["input_ids"] = processed_outputs["labels"]
         else:
